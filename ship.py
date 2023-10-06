@@ -16,11 +16,14 @@ class Ship:
         self.rect.bottom = self.screen_rect.bottom
 
         self.moving_right = False  # по умолчанию он не двигается вправо
+        self.moving_left = False  # по умолчанию он не двигается влево
 
     def update(self):
         """Обновляет позицию корабля"""
         if self.moving_right:  # если двигаться вправо можно
             self.rect.centerx += 1
+        elif self.moving_left:
+            self.rect.centerx -= 1
 
     def blitme(self):
         """Рисует корабль на экране игры"""

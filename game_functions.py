@@ -10,9 +10,13 @@ def check_events(ship):
         elif event.type == pg.KEYDOWN:  # если кто-то нажал на кнопку
             if event.key == pg.K_RIGHT:  # если это кнопка вправо
                 ship.moving_right = True  # разрешаем кораблю двигаться вправо
+            elif event.key == pg.K_LEFT:
+                ship.moving_left = True
         elif event.type == pg.KEYUP:  # если кнопку отпустили
             if event.key == pg.K_RIGHT:  # если это кнопка вправо
                 ship.moving_right = False  # запрещаем кораблю двигаться вправо
+            elif event.key == pg.K_LEFT:
+                ship.moving_left = False
 
 
 def update_screen(settings, screen, ship):
