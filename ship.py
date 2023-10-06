@@ -15,6 +15,13 @@ class Ship:
         self.rect.centerx = self.screen_rect.centerx  # центр по горизонтали корабля берется из центра экрана
         self.rect.bottom = self.screen_rect.bottom
 
+        self.moving_right = False  # по умолчанию он не двигается вправо
+
+    def update(self):
+        """Обновляет позицию корабля"""
+        if self.moving_right:  # если двигаться вправо можно
+            self.rect.centerx += 1
+
     def blitme(self):
         """Рисует корабль на экране игры"""
         self.screen.blit(self.image, self.rect)
