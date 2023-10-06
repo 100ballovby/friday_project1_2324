@@ -2,8 +2,9 @@ import pygame as pg
 
 
 class Ship:
-    def __init__(self, screen):
+    def __init__(self, settings, screen):
         """Инициализация корабля и установка его в нужную позицию на экране"""
+        self.ai_settings = settings  # связал класс настроек с классом корабля
         self.screen = screen
 
         # загрузим картинку корабля
@@ -20,10 +21,10 @@ class Ship:
 
     def update(self):
         """Обновляет позицию корабля"""
-        if self.moving_right:  # если двигаться вправо можно
-            self.rect.centerx += 1
-        elif self.moving_left:
-            self.rect.centerx -= 1
+        if self.moving_right and self.rect.right < self.screen_rect.right:  # если двигаться вправо можно
+            self.rect.centerx += self.ai_settings.ship_speed_factor
+        elif self.moving_left and self.rect.left > 0:
+            self.rect.centerx -= self.ai_settings.ship_speed_factor
 
     def blitme(self):
         """Рисует корабль на экране игры"""
