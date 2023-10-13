@@ -7,9 +7,10 @@ class Bullet(Sprite):
     def __init__(self, settings, screen, ship):
         super().__init__()
         self.screen = screen
+        self.image = pg.image.load('images/bullet.png')
+        self.rect = self.image.get_rect()
         # создание снаряда в позици 0,0
-        self.rect = pg.Rect(0, 0, settings.bullet_width,
-                            settings.bullet_height)
+        #self.rect = pg.Rect(0, 0, settings.bullet_width,settings.bullet_height)
         self.rect.centerx = ship.rect.centerx  # пулю перемещаю к кораблю
         self.rect.top = ship.rect.top
         # позиция (координаты) снаряда хранятся как дробь
@@ -22,7 +23,7 @@ class Bullet(Sprite):
         self.rect.y = self.y
 
     def draw_bullet(self):
-        pg.draw.rect(self.screen, self.color, self.rect)
+        self.screen.blit(self.image, self.rect)
 
 
 
