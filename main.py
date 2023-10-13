@@ -18,10 +18,7 @@ def run_game():
     while True:  # цикл игры
         gf.check_events(ai_settings, screen, ship, bullets)
         ship.update()
-        bullets.update()  # применяю метод update ко ВСЕМ ПУЛЯМ В ГРУППЕ
-        for bullet in bullets.copy():
-            if bullet.rect.bottom <= 0:
-                bullets.remove(bullet)
+        gf.update_bullets(bullets)
         gf.update_screen(ai_settings, screen, ship, bullets)
 
 
