@@ -2,6 +2,7 @@ import pygame as pg
 import game_functions as gf
 from settings import Settings
 from ship import Ship
+from pygame.sprite import Group
 
 
 def run_game():
@@ -12,11 +13,16 @@ def run_game():
     pg.display.set_caption("Alien Invasion")  # название окна игры
 
     ship = Ship(ai_settings, screen)
+    bullets = Group()
 
     while True:  # цикл игры
-        gf.check_events(ship)
+        gf.check_events(ai_settings, screen, ship, bullets)
         ship.update()
-        gf.update_screen(ai_settings, screen, ship)
+        bullets.update()  # применяю метод update ко ВСЕМ ПУЛЯМ В ГРУППЕ
+        for bullet in bullets.copy():
+            if bullet.rect.bottom <= 0:
+                bullets.remove(bullet)
+        gf.update_screen(ai_settings, screen, ship, bullets)
 
 
 run_game()  # вызываем игровую функцию
