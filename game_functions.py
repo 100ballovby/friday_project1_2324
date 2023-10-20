@@ -11,6 +11,8 @@ def check_keydown_events(event, settings, screen, ship, bullets):
         ship.moving_left = True
     if event.key == pg.K_SPACE:  # если нажали на пробел
         fire_bullet(settings, screen, ship, bullets)
+    if event.key == pg.K_q:  # быстрый выход из игры
+        sys.exit()
 
 
 def check_keyup_events(event, ship):
