@@ -17,12 +17,13 @@ def run_game():
     aliens = Group()  # создаю список для пришельцев
     bullets = Group()
 
+    gf.create_fleet(ai_settings, screen, aliens, ship)
+
     while True:  # цикл игры
         gf.check_events(ai_settings, screen, ship, bullets)
         ship.update()
         gf.update_bullets(bullets)
         gf.update_screen(ai_settings, screen, ship, bullets, aliens)
-        gf.create_fleet(ai_settings, screen, aliens, ship)
 
 
 run_game()  # вызываем игровую функцию
