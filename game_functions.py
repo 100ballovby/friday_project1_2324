@@ -36,7 +36,8 @@ def check_events(settings, screen, ship, bullets):
 
 
 def update_screen(settings, screen, ship, bullets, aliens):
-    screen.fill(settings.bg_color)  # заливаем экран игры цветом
+    #screen.fill(settings.bg_color)  # заливаем экран игры цветом
+    screen.blit(settings.bg, (0, 0))
     for bullet in bullets:
         bullet.draw_bullet()
     ship.blitme()
