@@ -2,6 +2,7 @@ import sys
 import pygame as pg
 from bullet import Bullet
 from alien import Alien
+from time import sleep
 
 
 def check_keydown_events(event, settings, screen, ship, bullets):
@@ -118,7 +119,38 @@ def change_fleet_direction(settings, aliens):
     settings.fleet_direction *= -1
 
 
-def update_aliens(aliens, settings):
+def update_aliens(aliens, settings, ship, stats, screen, bullets):
     """Обновляет позиции всех пришельцев во флоте"""
     check_fleet_edges(settings, aliens)
     aliens.update()
+
+    if pg.sprite.spritecollideany(ship, aliens):  # если столкнулись с кораблем
+        ship_hit(settings, stats, screen, ship, aliens, bullets)
+
+    check_aliens_bottom(settings, stats, screen, ship, aliens, bullets)
+
+
+def ship_hit(settings, stats, screen, ship, aliens, bullets):
+    """Обрабатывает столкновения пришельцев и корабля"""
+    if stats.ships_left > 0:
+        stats.ships_left -= 1
+
+        aliens.empty()  # очищаем группу пришельцев
+        bullets.empty()  # очищаем группу пуль
+
+        create_fleet(settings, screen, aliens, ship)  # создаем новый флот
+        ship.center_ship()  # устанавливаем корабль посередине
+
+        sleep(1)  # замораживаем игру на 1 секунду
+    else:
+        stats.game_active = False
+
+
+def check_aliens_bottom(settings, stats, screen, ship, aliens, bullets):
+    """Проверка столкновения пришельцев с нижним краем экрана"""
+    screen_rect = screen.get_rect()
+    for alien in aliens.sprites():
+        if alien.rect.bottom >= screen_rect.bottom:
+            ship_hit(settings, stats, screen, ship, aliens, bullets)
+            break
+
