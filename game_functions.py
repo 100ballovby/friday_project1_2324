@@ -45,12 +45,17 @@ def update_screen(settings, screen, ship, bullets, aliens):
     pg.display.flip()  # обновление кадров в игре
 
 
-def update_bullets(bullets):
+def update_bullets(bullets, aliens, settings, screen, ship):
     bullets.update()  # применяю метод update ко ВСЕМ ПУЛЯМ В ГРУППЕ
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
-
+    collisions = pg.sprite.groupcollide(bullets, aliens, True, True)
+    # groupcollide - определяет столкновение экземпляров двух групп, параметры True отвечают за то, чтобы убрать группы а и б
+    if len(aliens) == 0:
+        # уничтожаем существующие пули и обновляем флот
+        bullets.empty()
+        create_fleet(settings, screen, aliens, ship)
 
 def fire_bullet(settings, screen, ship, bullets):
     """Выпускает пули, пока не достигнуто ограничение по количеству пуль"""
