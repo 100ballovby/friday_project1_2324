@@ -91,3 +91,23 @@ def create_fleet(settings, screen, aliens, ship):
         for alien_number in range(number_aliens):
             create_alien(settings, screen, aliens, alien_number, row_number)
 
+
+def check_fleet_edges(settings, aliens):
+    """Реагирует на достижение одним из пришельцев из флота края экрана"""
+    for alien in aliens.sprites():  # перебираю флот пришельцев
+        if alien.check_edges():
+            change_fleet_direction(settings, aliens)
+            break  # выход из цикла нужен, чтобы пришельцы не перелетали друг через друга
+
+
+def change_fleet_direction(settings, aliens):
+    """Спускает флот и меняет направление движения"""
+    for alien in aliens.sprites():
+        alien.rect.y += settings.fleet_drop_speed
+    settings.fleet_direction *= -1
+
+
+def update_aliens(aliens, settings):
+    """Обновляет позиции всех пришельцев во флоте"""
+    check_fleet_edges(settings, aliens)
+    aliens.update()
