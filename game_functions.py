@@ -43,6 +43,7 @@ def check_play_button(stats, btn, mouse_x, mouse_y, settings, screen, ship, bull
     """Запускает новую игру при нажатии на кнопку"""
     button_clicked = btn.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked and not stats.game_active:
+        settings.initialize_dynamic_settings()
         pg.mouse.set_visible(False)  # скрыть курсор после нажатия на кнопку
         stats.reset_stats()
         stats.game_active = True
@@ -81,6 +82,7 @@ def check_bullet_alien_collision(bullets, aliens, settings, screen, ship):
     if len(aliens) == 0:
         # уничтожаем существующие пули и обновляем флот
         bullets.empty()
+        settings.increase_speed()
         create_fleet(settings, screen, aliens, ship)
 
 
@@ -152,7 +154,7 @@ def update_aliens(aliens, settings, ship, stats, screen, bullets):
 
 def ship_hit(settings, stats, screen, ship, aliens, bullets):
     """Обрабатывает столкновения пришельцев и корабля"""
-    if stats.ships_left > 0:
+    if stats.ships_left > 1:
         stats.ships_left -= 1
 
         aliens.empty()  # очищаем группу пришельцев
