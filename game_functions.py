@@ -25,7 +25,7 @@ def check_keyup_events(event, ship):
         ship.moving_left = False
 
 
-def check_events(settings, screen, ship, bullets):
+def check_events(settings, screen, ship, bullets, stats, btn, aliens):
     for event in pg.event.get():  # обработчик событий pygame
         if event.type == pg.QUIT:
             pg.quit()
@@ -34,15 +34,35 @@ def check_events(settings, screen, ship, bullets):
             check_keydown_events(event, settings, screen, ship, bullets)
         elif event.type == pg.KEYUP:  # если кнопку отпустили
             check_keyup_events(event, ship)
+        elif event.type == pg.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pg.mouse.get_pos()
+            check_play_button(stats, btn, mouse_x, mouse_y, settings, screen, ship, bullets, aliens)
 
 
-def update_screen(settings, screen, ship, bullets, aliens):
+def check_play_button(stats, btn, mouse_x, mouse_y, settings, screen, ship, bullets, aliens):
+    """Запускает новую игру при нажатии на кнопку"""
+    button_clicked = btn.rect.collidepoint(mouse_x, mouse_y)
+    if button_clicked and not stats.game_active:
+        pg.mouse.set_visible(False)  # скрыть курсор после нажатия на кнопку
+        stats.reset_stats()
+        stats.game_active = True
+
+        aliens.empty()
+        bullets.empty()
+
+        create_fleet(settings, screen, aliens, ship)
+        ship.center_ship()
+
+
+def update_screen(settings, screen, ship, bullets, aliens, stats, btn):
     #screen.fill(settings.bg_color)  # заливаем экран игры цветом
     screen.blit(settings.bg, (0, 0))
     for bullet in bullets:
         bullet.draw_bullet()
     ship.blitme()
     aliens.draw(screen)
+    if not stats.game_active:
+        btn.draw_button()
     pg.display.flip()  # обновление кадров в игре
 
 
@@ -144,6 +164,7 @@ def ship_hit(settings, stats, screen, ship, aliens, bullets):
         sleep(1)  # замораживаем игру на 1 секунду
     else:
         stats.game_active = False
+        pg.mouse.set_visible(True)  # показать курсор после проигрыша
 
 
 def check_aliens_bottom(settings, stats, screen, ship, aliens, bullets):

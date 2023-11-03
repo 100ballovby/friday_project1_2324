@@ -20,3 +20,14 @@ class Button:
         # сообщение кнопки создаем один раз
         self.prep_msg(msg)
 
+    def prep_msg(self, msg):
+        """Преобразует msg в прямоугольник и выравнивает по центру кнопки"""
+        self.msg_image = self.font.render(msg, True, self.text_color, self.color)
+        self.msg_image_rect = self.msg_image.get_rect()
+        self.msg_image_rect.center = self.rect.center
+
+    def draw_button(self):
+        # отображение пустой кнопки и вывод сообщения
+        self.screen.fill(self.color, self.rect)
+        self.screen.blit(self.msg_image, self.msg_image_rect)
+
