@@ -1,9 +1,11 @@
 import pygame as pg
+from pygame.sprite import Sprite
 
 
-class Ship:
+class Ship(Sprite):
     def __init__(self, settings, screen):
         """Инициализация корабля и установка его в нужную позицию на экране"""
+        super().__init__()
         self.ai_settings = settings  # связал класс настроек с классом корабля
         self.screen = screen
 
