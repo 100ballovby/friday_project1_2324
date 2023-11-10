@@ -55,32 +55,41 @@ def check_play_button(stats, btn, mouse_x, mouse_y, settings, screen, ship, bull
         ship.center_ship()
 
 
-def update_screen(settings, screen, ship, bullets, aliens, stats, btn):
+def update_screen(settings, screen, ship, bullets, aliens, stats, btn, sb):
     #screen.fill(settings.bg_color)  # заливаем экран игры цветом
     screen.blit(settings.bg, (0, 0))
     for bullet in bullets:
         bullet.draw_bullet()
     ship.blitme()
     aliens.draw(screen)
+
+    # вывод очков
+    sb.show_score()
+
     if not stats.game_active:
         btn.draw_button()
     pg.display.flip()  # обновление кадров в игре
 
 
-def update_bullets(bullets, aliens, settings, screen, ship):
+def update_bullets(bullets, aliens, settings, screen, ship, sb, stats):
     bullets.update()  # применяю метод update ко ВСЕМ ПУЛЯМ В ГРУППЕ
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
-    check_bullet_alien_collision(bullets, aliens, settings, screen, ship)
+    check_bullet_alien_collision(bullets, aliens, settings, screen, ship, sb, stats)
 
 
-def check_bullet_alien_collision(bullets, aliens, settings, screen, ship):
+def check_bullet_alien_collision(bullets, aliens, settings, screen, ship, sb, stats):
     """Обработка коллизий пуль с пришельцами"""
     collisions = pg.sprite.groupcollide(bullets, aliens, True, True)
     # groupcollide - определяет столкновение экземпляров двух групп, параметры True отвечают за то, чтобы убрать группы а и б
+    for aliens in collisions.values():
+        stats.score += settings.alien_points * len(aliens)
+    sb.prep_score()
     if len(aliens) == 0:
         # уничтожаем существующие пули и обновляем флот
+        stats.level += 1
+        sb.prep_level()
         bullets.empty()
         settings.increase_speed()
         create_fleet(settings, screen, aliens, ship)
